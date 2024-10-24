@@ -52,16 +52,15 @@ pipeline {
          stage('Terraform Destroy') {
             steps {
                 dir ("gcloud-infrastructure"){
-                    sh 'sleep 1800'
                     sh 'terraform destroy --auto-approve'
                 }
             }
         }
 
-        // stage ('Invoke Downstream Pipeline') {
-        //     steps {
-        //         build job: 'pipeline-deployment', wait: true
-        //     }
-        // }
+        stage ('Invoke Downstream Pipeline') {
+            steps {
+                build job: 'pipeline-gke-deployment', wait: true
+            }
+        }
     }
 }

@@ -1,16 +1,16 @@
-resource "google_compute_network" "devo-vpc" {
-  name                    = "devo-vpc"
+resource "google_compute_network" "vpc" {
+  name                    = "vpc"
   project                 = "kthamel-gcloud"
   auto_create_subnetworks = false
   mtu                     = 1600
 }
 
-resource "google_compute_subnetwork" "devo-vpc-subnet" {
-  name          = "devo-vpc-subnet"
+resource "google_compute_subnetwork" "vpc-subnet" {
+  name          = "vpc-subnet"
   ip_cidr_range = "10.0.0.0/16"
   region        = "us-west1"
-  network       = google_compute_network.devo-vpc.self_link
-  project       = google_compute_network.devo-vpc.project
+  network       = google_compute_network.vpc.self_link
+  project       = google_compute_network.vpc.project
 
   secondary_ip_range {
     range_name    = "pods"
@@ -23,10 +23,10 @@ resource "google_compute_subnetwork" "devo-vpc-subnet" {
   }
 }
 
-resource "google_compute_firewall" "devo-vpc" {
+resource "google_compute_firewall" "vpc" {
   name     = "kthamel-vpc-dev-firewall-all"
-  network  = google_compute_network.devo-vpc.self_link
-  project  = google_compute_network.devo-vpc.project
+  network  = google_compute_network.vpc.self_link
+  project  = google_compute_network.vpc.project
   priority = 100
 
   allow {

@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('List GKE Clusters') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'gcloud container clusters list'
+                }
+            }
+        }
+
+        stage('Authenticate Cluster') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'gcloud container clusters get-credentials gke-cluster --region=us-west1-a'
+                }
+            }
+        }
+
+        stage('Deployment - App-01') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'echo Completed'
+                }
+            }
+        }
+    }
+}
