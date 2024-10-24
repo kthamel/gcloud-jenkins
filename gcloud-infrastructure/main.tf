@@ -1,24 +1,32 @@
-data "google_client_openid_userinfo" "me" {}
-
-resource "google_compute_network" "vpc-dev" {
-  name                    = "vpc-dev"
+resource "google_compute_network" "devo-vpc" {
+  name                    = "devo-vpc"
   project                 = "kthamel-gcloud"
   auto_create_subnetworks = false
   mtu                     = 1600
 }
 
-resource "google_compute_subnetwork" "vpc-dev-subnet-public" {
-  name          = "vpc-dev-subnet-public"
-  ip_cidr_range = "172.16.0.0/16"
+resource "google_compute_subnetwork" "devo-vpc-subnet" {
+  name          = "devo-vpc-subnet"
+  ip_cidr_range = "10.0.0.0/16"
   region        = "us-west1"
-  network       = google_compute_network.vpc-dev.self_link
-  project       = google_compute_network.vpc-dev.project
+  network       = google_compute_network.devo-vpc.self_link
+  project       = google_compute_network.devo-vpc.project
+
+  secondary_ip_range {
+    range_name    = "pods"
+    ip_cidr_range = "10.1.0.0/16"
+  }
+
+  secondary_ip_range {
+    range_name    = "services"
+    ip_cidr_range = "10.2.0.0/16"
+  }
 }
 
-resource "google_compute_firewall" "vpc-dev-firewall-all" {
-  name     = "vpc-dev-firewall-all"
-  network  = google_compute_network.vpc-dev.name
-  project  = google_compute_network.vpc-dev.project
+resource "google_compute_firewall" "devo-vpc" {
+  name     = "kthamel-vpc-dev-firewall-all"
+  network  = google_compute_network.devo-vpc.self_link
+  project  = google_compute_network.devo-vpc.project
   priority = 100
 
   allow {
@@ -26,59 +34,28 @@ resource "google_compute_firewall" "vpc-dev-firewall-all" {
     ports    = ["0-65535"]
   }
 
-  source_ranges = ["89.154.174.89/32"] // Have to change into /32 public ip
+  source_ranges = ["89.154.174.89/32"] 
 }
 
-resource "google_compute_firewall" "vpc-dev-firewall-icmp" {
-  name     = "vpc-dev-firewall-icmp"
-  network  = google_compute_network.vpc-dev.name
-  project  = google_compute_network.vpc-dev.project
-  priority = 101
-
-  allow {
-    protocol = "icmp"
-  }
-
-  source_ranges = ["89.154.174.89/32"]
-}
-
-resource "tls_private_key" "kthamel-ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "local_file" "kthamel-ssh-pem" {
-  content         = tls_private_key.kthamel-ssh.private_key_pem
-  filename        = "kthamel-key"
-  file_permission = "0600"
-}
-
-resource "google_compute_instance" "kthamel-instance-dev" {
-  name         = "jenkins-dev"
+resource "google_compute_instance" "jenkins-instance" {
+  name         = "jenkins-instance"
   project      = "kthamel-gcloud"
-  machine_type = "e2-standard-2"
+  machine_type = "e2-micro"
   zone         = "us-west1-a"
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
     }
   }
-
   network_interface {
-    subnetwork = google_compute_subnetwork.vpc-dev-subnet-public.self_link
-    access_config {}
+    network = "default"
   }
-
-  metadata = {
-    ssh-keys = "${split("@", data.google_client_openid_userinfo.me.email)[0]}:${tls_private_key.kthamel-ssh.public_key_openssh}"
-  }
-
   labels = {
-    name    = "jenkins-instance-dev"
+    name    = "devo-jenkins-gcp-instance"
     project = "kthamel-gcloud"
   }
 }
 
-output instance_public_ip {
-  value = google_compute_instance.kthamel-instance-dev.network_interface.0.access_config.0.nat_ip
+output "self_link_value" {
+  value = google_compute_instance.jenkins-instance.self_link
 }

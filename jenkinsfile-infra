@@ -11,6 +11,14 @@ pipeline {
             }
         }
 
+        stage('Terraform Format') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'terraform fmt .'
+                }
+            }
+        }
+
         stage('Terraform Plan') {
             steps {
                 dir ("gcloud-infrastructure"){
@@ -37,15 +45,14 @@ pipeline {
             steps {
                 dir ("gcloud-infrastructure"){
                     sh 'terraform apply --auto-approve'
-                    // sh 'terraform destroy --auto-approve'
                 }
             }
         }
 
-        stage ('Invoke Downstream Pipeline') {
-            steps {
-                build job: 'pipeline-deployment', wait: true
-            }
-        }
+        // stage ('Invoke Downstream Pipeline') {
+        //     steps {
+        //         build job: 'pipeline-deployment', wait: true
+        //     }
+        // }
     }
 }
