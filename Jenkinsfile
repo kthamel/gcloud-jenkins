@@ -49,6 +49,17 @@ pipeline {
             }
         }
 
+         stage('Terraform Destroy') {
+            when {
+                expression { approvalStatus["ApprovalStatus"] == 'Rejected' }
+            }
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'terraform destroy --auto-approve'
+                }
+            }
+        }
+
         // stage ('Invoke Downstream Pipeline') {
         //     steps {
         //         build job: 'pipeline-deployment', wait: true
