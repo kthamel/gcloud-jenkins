@@ -78,3 +78,7 @@ resource "google_compute_instance" "kthamel-instance-dev" {
     project = "kthamel-gcloud"
   }
 }
+
+output instance_public_ip {
+  value = google_compute_instance.kthamel-instance-dev.network_interface.0.access_config.0.nat_ip
+}
