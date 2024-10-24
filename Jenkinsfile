@@ -36,7 +36,7 @@ pipeline {
             }
             steps {
                 dir ("gcloud-infrastructure"){
-                    sh 'terraform destroy --auto-approve'
+                    sh 'terraform apply --auto-approve'
                 }
             }
         }
