@@ -37,14 +37,14 @@ pipeline {
                     }
                 }
 
-                // stage('Application deployment - Python-A') {
-                //     steps {
-                //         sh 'helm lint ./helm-app-python'
-                //         sh 'helm install app-python-a --debug --dry-run ./helm-app-python'
-                //         sh 'helm template ./helm-app-python'
-                //         sh 'helm install app-nginx-b ./helm-app-python'
-                //     }
-                // }
+                stage('Application deployment - Python-A') {
+                    steps {
+                        sh 'helm lint ./helm-app-python'
+                        sh 'helm install app-python-a --debug --dry-run ./helm-app-python'
+                        sh 'helm template ./helm-app-python'
+                        sh 'helm install app-nginx-b ./helm-app-python'
+                    }
+                }
             }
         }
     }
