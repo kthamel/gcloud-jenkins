@@ -44,7 +44,7 @@ pipeline {
         stage('Copy Keys'){
            steps {
                 dir ("gcloud-infrastructure"){
-                    sh 'cp -rv kthamel-ssh /tmp'
+                    sh 'cp -rv kthamel-key /tmp'
                 }
             } 
         }
