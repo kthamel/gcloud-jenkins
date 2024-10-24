@@ -11,6 +11,14 @@ pipeline {
             }
         }
 
+        stage('Terraform Format') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'terraform fmt .'
+                }
+            }
+        }
+
         stage('Terraform Plan') {
             steps {
                 dir ("gcloud-infrastructure"){
@@ -36,17 +44,15 @@ pipeline {
             }
             steps {
                 dir ("gcloud-infrastructure"){
-                    sh 'terraform destroy --auto-approve'
+                    sh 'terraform apply --auto-approve'
                 }
             }
         }
 
-        // stage('Copy Keys'){
-        //    steps {
-        //         dir ("gcloud-infrastructure"){
-        //             sh 'cp -rv kthamel-key /tmp'
-        //         }
-        //     } 
+        // stage ('Invoke Downstream Pipeline') {
+        //     steps {
+        //         build job: 'pipeline-deployment', wait: true
+        //     }
         // }
     }
 }
