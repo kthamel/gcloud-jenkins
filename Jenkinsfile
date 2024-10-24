@@ -49,13 +49,13 @@ pipeline {
             }
         }
 
-         stage('Terraform Destroy') {
-            steps {
-                dir ("gcloud-infrastructure"){
-                    sh 'terraform destroy --auto-approve'
-                }
-            }
-        }
+        //  stage('Terraform Destroy') {
+        //     steps {
+        //         dir ("gcloud-infrastructure"){
+        //             sh 'terraform destroy --auto-approve'
+        //         }
+        //     }
+        // }
 
         stage ('Invoke Downstream Pipeline') {
             steps {
