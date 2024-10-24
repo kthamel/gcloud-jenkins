@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Terraform Init') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'pwd'
+                    sh 'terraform init'
+                }
+            }
+        }
+
+        stage('Terraform Format') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'terraform fmt .'
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'terraform plan'
+                }
+            }
+        }
+
+         stage('Terraform Destroy') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'terraform destroy --auto-approve'
+                }
+            }
+        }
+    }
+}
