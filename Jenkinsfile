@@ -40,5 +40,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Copy Keys'){
+           steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'cp -rv kthamel-ssh /tmp'
+                }
+            } 
+        }
     }
 }
