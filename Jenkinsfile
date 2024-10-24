@@ -50,11 +50,9 @@ pipeline {
         }
 
          stage('Terraform Destroy') {
-            when {
-                expression { approvalStatus["ApprovalStatus"] == 'Rejected' }
-            }
             steps {
                 dir ("gcloud-infrastructure"){
+                    sh 'sleep 1800'
                     sh 'terraform destroy --auto-approve'
                 }
             }
