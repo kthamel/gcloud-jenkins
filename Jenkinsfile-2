@@ -42,7 +42,7 @@ pipeline {
                         sh 'helm lint ./helm-app-python'
                         sh 'helm install app-python-a --debug --dry-run ./helm-app-python'
                         sh 'helm template ./helm-app-python'
-                        sh 'helm install app-nginx-b ./helm-app-python'
+                        sh 'helm install app-python-a ./helm-app-python'
                     }
                 }
             }
