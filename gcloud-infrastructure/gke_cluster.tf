@@ -27,7 +27,8 @@ resource "google_container_node_pool" "gke-cluster-system-nodes" {
 
   node_config {
     preemptible  = true
-    machine_type = "e2-medium"
+    #machine_type = "e2-medium"
+    machine_type = "t2a-standard-4"
     disk_size_gb = 20
     labels = {
       name = "system-node"
@@ -48,7 +49,8 @@ resource "google_container_node_pool" "gke-cluster-worker-nodes" {
 
   node_config {
     preemptible  = true
-    machine_type = "e2-medium"
+    #machine_type = "e2-medium"
+    machine_type = "t2a-standard-4"
     disk_size_gb = 20
     labels = {
       name = "worker-node"
