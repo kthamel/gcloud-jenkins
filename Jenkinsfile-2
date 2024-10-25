@@ -20,31 +20,31 @@ pipeline {
 
         stage('Application deployment') {
             parallel {
-                stage('Application deployment - Nginx-A') {
-                    steps {
-                        sh 'helm lint ./helm-app-nginx-a'
-                        sh 'helm install app-nginx-a --debug --dry-run ./helm-app-nginx-a'
-                        sh 'helm template ./helm-app-nginx-a'
-                        sh 'helm install app-nginx-a ./helm-app-nginx-a'
-                    }
-                }   
-                stage('Application deployment - Nginx-B') {
-                    steps {
-                        sh 'helm lint ./helm-app-nginx-b'
-                        sh 'helm install app-nginx-b --debug --dry-run ./helm-app-nginx-b'
-                        sh 'helm template ./helm-app-nginx-b'
-                        sh 'helm install app-nginx-b ./helm-app-nginx-b'
-                    }
-                }
-
-                // stage('Application deployment - Python-A') {
+                // stage('Application deployment - Nginx-A') {
                 //     steps {
-                //         sh 'helm lint ./helm-app-python'
-                //         sh 'helm install app-python-a --debug --dry-run ./helm-app-python'
-                //         sh 'helm template ./helm-app-python'
-                //         sh 'helm install app-python-a ./helm-app-python'
+                //         sh 'helm lint ./helm-app-nginx-a'
+                //         sh 'helm install app-nginx-a --debug --dry-run ./helm-app-nginx-a'
+                //         sh 'helm template ./helm-app-nginx-a'
+                //         sh 'helm install app-nginx-a ./helm-app-nginx-a'
+                //     }
+                // }   
+                // stage('Application deployment - Nginx-B') {
+                //     steps {
+                //         sh 'helm lint ./helm-app-nginx-b'
+                //         sh 'helm install app-nginx-b --debug --dry-run ./helm-app-nginx-b'
+                //         sh 'helm template ./helm-app-nginx-b'
+                //         sh 'helm install app-nginx-b ./helm-app-nginx-b'
                 //     }
                 // }
+
+                stage('Application deployment - Python-A') {
+                    steps {
+                        sh 'helm lint ./helm-app-python'
+                        sh 'helm install app-python-a --debug --dry-run ./helm-app-python'
+                        sh 'helm template ./helm-app-python'
+                        sh 'helm install app-python-a ./helm-app-python'
+                    }
+                }
             }
         }
     }
