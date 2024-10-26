@@ -18,23 +18,19 @@ pipeline {
             }
         }
         
-        stage('Application deployment') {
-            parallel {
-                stage('Application Uninstall - Python-A') {
+        stage('Application Uninstall - Python-A') {
                     steps {
                         sh 'helm uninstall app-python-a'
                     }
                 }   
 
-                stage('Application deployment - Python-A') {
-                    steps {
-                        dir ("helm"){
-                            sh 'helm lint ./helm-app-python'
-                            sh 'helm install app-python-a --debug --dry-run ./helm-app-python'
-                            sh 'helm template ./helm-app-python'
-                            sh 'helm install app-python-a ./helm-app-python'
-                        }
-                    }
+        stage('Application deployment - Python-A') {
+            steps {
+                dir ("helm"){
+                    sh 'helm lint ./helm-app-python'
+                    sh 'helm install app-python-a --debug --dry-run ./helm-app-python'
+                    sh 'helm template ./helm-app-python'
+                    sh 'helm install app-python-a ./helm-app-python'
                 }
             }
         }
