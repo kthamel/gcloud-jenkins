@@ -18,6 +18,14 @@ pipeline {
             }
         }
 
+        stage('Clean-up') {
+            steps {
+                dir ("gcloud-infrastructure"){
+                    sh 'helm uninstall app-nginx-a app-nginx-b app-python-a'
+                }
+            }
+        }
+        
         stage('Application deployment') {
             parallel {
                 stage('Application deployment - Nginx-A') {
