@@ -51,7 +51,7 @@ pipeline {
 
         stage ('Invoke Downstream Pipeline') {
             steps {
-                build job: 'pipeline-gke-deployment', wait: true
+                build job: 'pipeline-gke-deploy', wait: true
             }
         }
     }
